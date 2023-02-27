@@ -5,6 +5,40 @@ import java.util.Scanner;
 public class CoffeeMachineActions {
     private static Scanner input = new Scanner(System.in);
 
+    enum Coffee {
+        ESPRESSO(250, 0, 16, 4),
+        LATTE(350, 75, 20, 7),
+        CAPPUCCINO(200, 100, 12, 6);
+
+        int water;
+        int milk;
+        int beans;
+        int price;
+
+        Coffee(int water, int milk, int beans, int price) {
+            this.water = water;
+            this.milk = milk;
+            this.beans = beans;
+            this.price = price;
+        }
+
+        public int getWater() {
+            return water;
+        }
+
+        public int getMilk() {
+            return milk;
+        }
+
+        public int getBeans() {
+            return beans;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+    }
+
     public static void main(String[] args) {
         CoffeeMachine coffeeMachine = new CoffeeMachine(400, 540, 120, 9, 550);
         selectAction(coffeeMachine);
@@ -52,16 +86,38 @@ public class CoffeeMachineActions {
         }
     }
 
+    private static void makeTheCoffee(CoffeeMachine coffeeMachine) {
+        System.out.println("");
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
+        String type = input.nextLine();
+        switch (type) {
+            case "1":
+                makeEspresso(coffeeMachine);
+                break;
+            case "2":
+                makeLatte(coffeeMachine);
+                break;
+            case "3":
+                makeCappuccino(coffeeMachine);
+                break;
+            case "back":
+                return;
+            default:
+                System.out.println("Unknown command");
+        }
+    }
+
     public static void makeEspresso(CoffeeMachine coffeeMachine) {
-        if (coffeeMachine.getWater() >= 250 && coffeeMachine.getBeans() >= 16 && coffeeMachine.getDisposableCups() >= 1) {
-            coffeeMachine.setWater(coffeeMachine.getWater() - 250);
-            coffeeMachine.setBeans(coffeeMachine.getBeans() - 16);
+        if (coffeeMachine.getWater() >= Coffee.ESPRESSO.getWater() && coffeeMachine.getBeans() >= Coffee.ESPRESSO.getBeans()
+                && coffeeMachine.getDisposableCups() >= 1) {
+            coffeeMachine.setWater(coffeeMachine.getWater() - Coffee.ESPRESSO.getWater());
+            coffeeMachine.setBeans(coffeeMachine.getBeans() - Coffee.ESPRESSO.getBeans());
             coffeeMachine.setDisposableCups(coffeeMachine.getDisposableCups() - 1);
-            coffeeMachine.setMoney(coffeeMachine.getMoney() + 4);
+            coffeeMachine.setMoney(coffeeMachine.getMoney() + Coffee.ESPRESSO.getPrice());
             System.out.println("I have enough resources, making you a coffee!");
-        } else if (coffeeMachine.getWater() < 250) {
+        } else if (coffeeMachine.getWater() < Coffee.ESPRESSO.getWater()) {
             System.out.println("Sorry, not enough water!");
-        } else if (coffeeMachine.getBeans() < 16) {
+        } else if (coffeeMachine.getBeans() < Coffee.ESPRESSO.getBeans()) {
             System.out.println("Sorry, not enough coffee beans!");
         } else if (coffeeMachine.getDisposableCups() < 1) {
             System.out.println("Sorry, not enough coffee cups!");
@@ -71,18 +127,19 @@ public class CoffeeMachineActions {
     }
 
     public static void makeLatte(CoffeeMachine coffeeMachine) {
-        if (coffeeMachine.getWater() >= 350 && coffeeMachine.getMilk() >= 75 && coffeeMachine.getBeans() >= 20 && coffeeMachine.getDisposableCups() >= 1) {
-            coffeeMachine.setWater(coffeeMachine.getWater() - 350);
-            coffeeMachine.setMilk(coffeeMachine.getMilk() - 75);
-            coffeeMachine.setBeans(coffeeMachine.getBeans() - 20);
+        if (coffeeMachine.getWater() >= Coffee.LATTE.getWater() && coffeeMachine.getMilk() >= Coffee.LATTE.getMilk()
+                && coffeeMachine.getBeans() >= Coffee.LATTE.getBeans() && coffeeMachine.getDisposableCups() >= 1) {
+            coffeeMachine.setWater(coffeeMachine.getWater() - Coffee.LATTE.getWater());
+            coffeeMachine.setMilk(coffeeMachine.getMilk() - Coffee.LATTE.getMilk());
+            coffeeMachine.setBeans(coffeeMachine.getBeans() - Coffee.LATTE.getBeans());
             coffeeMachine.setDisposableCups(coffeeMachine.getDisposableCups() - 1);
-            coffeeMachine.setMoney(coffeeMachine.getMoney() + 7);
+            coffeeMachine.setMoney(coffeeMachine.getMoney() + Coffee.LATTE.getPrice());
             System.out.println("I have enough resources, making you a coffee!");
-        } else if (coffeeMachine.getWater() < 350) {
+        } else if (coffeeMachine.getWater() < Coffee.LATTE.getWater()) {
             System.out.println("Sorry, not enough water!");
-        } else if (coffeeMachine.getMilk() < 75) {
+        } else if (coffeeMachine.getMilk() < Coffee.LATTE.getMilk()) {
             System.out.println("Sorry, not enough milk!");
-        } else if (coffeeMachine.getBeans() < 12) {
+        } else if (coffeeMachine.getBeans() < Coffee.LATTE.getBeans()) {
             System.out.println("Sorry, not enough coffee beans!");
         } else if (coffeeMachine.getDisposableCups() < 1) {
             System.out.println("Sorry, not enough coffee cups!");
@@ -92,18 +149,19 @@ public class CoffeeMachineActions {
     }
 
     public static void makeCappuccino(CoffeeMachine coffeeMachine) {
-        if (coffeeMachine.getWater() >= 200 && coffeeMachine.getMilk() >= 100 && coffeeMachine.getBeans() >= 12 && coffeeMachine.getDisposableCups() >= 1) {
-            coffeeMachine.setWater(coffeeMachine.getWater() - 200);
-            coffeeMachine.setMilk(coffeeMachine.getMilk() - 100);
-            coffeeMachine.setBeans(coffeeMachine.getBeans() - 12);
+        if (coffeeMachine.getWater() >= Coffee.CAPPUCCINO.getWater() && coffeeMachine.getMilk() >= Coffee.CAPPUCCINO.getMilk()
+                && coffeeMachine.getBeans() >= Coffee.CAPPUCCINO.getBeans() && coffeeMachine.getDisposableCups() >= 1) {
+            coffeeMachine.setWater(coffeeMachine.getWater() - Coffee.CAPPUCCINO.getWater());
+            coffeeMachine.setMilk(coffeeMachine.getMilk() - Coffee.CAPPUCCINO.getMilk());
+            coffeeMachine.setBeans(coffeeMachine.getBeans() - Coffee.CAPPUCCINO.getBeans());
             coffeeMachine.setDisposableCups(coffeeMachine.getDisposableCups() - 1);
-            coffeeMachine.setMoney(coffeeMachine.getMoney() + 6);
+            coffeeMachine.setMoney(coffeeMachine.getMoney() + Coffee.CAPPUCCINO.getPrice());
             System.out.println("I have enough resources, making you a coffee!");
-        } else if (coffeeMachine.getWater() < 200) {
+        } else if (coffeeMachine.getWater() < Coffee.CAPPUCCINO.getWater()) {
             System.out.println("Sorry, not enough water!");
-        } else if (coffeeMachine.getMilk() < 100) {
+        } else if (coffeeMachine.getMilk() < Coffee.CAPPUCCINO.getMilk()) {
             System.out.println("Sorry, not enough milk!");
-        } else if (coffeeMachine.getBeans() < 12) {
+        } else if (coffeeMachine.getBeans() < Coffee.CAPPUCCINO.getBeans()) {
             System.out.println("Sorry, not enough coffee beans!");
         } else if (coffeeMachine.getDisposableCups() < 1) {
             System.out.println("Sorry, not enough coffee cups!");
@@ -131,24 +189,4 @@ public class CoffeeMachineActions {
         coffeeMachine.setMoney(0);
     }
 
-    private static void makeTheCoffee(CoffeeMachine coffeeMachine) {
-        System.out.println("");
-        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
-        String type = input.nextLine();
-        switch (type) {
-            case "1":
-                makeEspresso(coffeeMachine);
-                break;
-            case "2":
-                makeLatte(coffeeMachine);
-                break;
-            case "3":
-                makeCappuccino(coffeeMachine);
-                break;
-            case "back":
-                return;
-            default:
-                System.out.println("Unknown command");
-        }
-    }
 }
